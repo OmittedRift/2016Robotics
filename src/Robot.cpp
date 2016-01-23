@@ -8,13 +8,21 @@ private:
 	const std::string autoNameDefault = "Default";
 	const std::string autoNameCustom = "My Auto";
 	std::string autoSelected;
-
+	CANTalon* motor1;
+	CANTalon* motor2;
+	GenericHID* leftstick;
+	GenericHID* rightstick;
+	Joystick* GetStickForPort();
 	void RobotInit()
 	{
 		chooser = new SendableChooser();
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
 		chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
 		SmartDashboard::PutData("Auto Modes", chooser);
+		motor1 = new CANTalon(0);
+		motor2 = new CANTalon(1);
+		Joystick *stick = new Joystick(1);
+		double speed = stick->GetY();
 	}
 
 
@@ -56,7 +64,8 @@ private:
 
 	void TeleopPeriodic()
 	{
-
+		motor1 ->Set(.2 * leftstick);
+		motor2 ->Set(.2 * leftstick);
 	}
 
 	void TestPeriodic()
